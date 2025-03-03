@@ -3,7 +3,7 @@ export type UserLabel = {
 }
 
 export type User = {
-  id: string | null
+  id: string
   label: UserLabel[] | null
   type: 'LDAP' | 'local' | null
   login: string | null
