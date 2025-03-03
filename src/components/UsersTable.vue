@@ -20,22 +20,21 @@ const tableHeader = [
     <div class="d-flex align-center ga-5 pb-5">
       <h1>Учетные записи</h1><v-btn @click="usersStore.addUser()">Добавить</v-btn>
     </div>
-    <table>
-      <thead>
-        <th v-for="header in tableHeader" :key="header.key">
-          {{ header.title }}
-        </th>
-      </thead>
-      <tbody>
-        <UserRow v-for="(user, index) in usersStore.users" :key="user.id" v-model:user="usersStore.users[index]"
-          @remove="usersStore.removeUser($event)" />
-      </tbody>
-    </table>
+    <div class="users-table">
+      <span v-for="header in tableHeader" :key="header.key">
+        {{ header.title }}
+      </span>
+      <UserRow v-for="(user, index) in usersStore.users" :key="user.id" v-model:user="usersStore.users[index]"
+        @remove="usersStore.removeUser($event)" />
+    </div>
+    <div v-if="usersStore.users.length === 0"><span>Данные отсутстуют</span></div>
   </div>
 </template>
 
 <style scoped lang="scss">
-table {
-  width: 100%;
+.users-table {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(256px, 1fr));
+  gap: 10px;
 }
 </style>
