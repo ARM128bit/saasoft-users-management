@@ -24,15 +24,15 @@ describe('Users', () => {
     cy.get('div[data-cy-id="type-0"] .v-messages').contains('Значение должно быть заполнено')
     cy.get('div[data-cy-id="login-0"] .v-messages').contains('Значение должно быть заполнено')
     cy.get('div[data-cy-id="password-0"] .v-messages').contains('Значение должно быть заполнено')
-    cy.get('div[data-cy-id="label-0"]').type('dd;ss')
+    cy.get('div[data-cy-id="label-0"] input').type('dd;ss')
     cy.get('div[data-cy-id="type-0"]').click()
     cy.get('div.v-overlay-container .v-list-item-title:contains("LDAP")').click()
     cy.get('div[data-cy-id="type-0"] .v-field__input input').should('have.value', 'LDAP')
     cy.get('div[data-cy-id="type-0"] .v-messages').should('be.empty')
     cy.get('div[data-cy-id="password-0"]').should('not.exist')
-    cy.get('div[data-cy-id="login-0"]').type('dd')
+    cy.get('div[data-cy-id="login-0"] input').type('dd')
     cy.get('div[data-cy-id="login-0"] .v-messages').contains('Минимум 3 символа')
-    cy.get('div[data-cy-id="login-0"]').type('1')
+    cy.get('div[data-cy-id="login-0"] input').type('1')
     cy.get('div[data-cy-id="login-0"] .v-messages').should('be.empty')
     cy.get('h1').click()
 
@@ -41,18 +41,18 @@ describe('Users', () => {
     cy.get('[data-cy-id="to-add-user"]').click()
     cy.get('div[data-cy-id="type-1"]').click()
     cy.get('div.v-overlay-container .v-list-item-title:contains("Локальная")').click()
-    cy.get('div[data-cy-id="login-1"]').type('dd1')
+    cy.get('div[data-cy-id="login-1"] input').type('dd1')
     cy.get('div[data-cy-id="login-1"] .v-messages').contains(
       'Имена пользователей должны быть уникальными',
     )
-    cy.get('div[data-cy-id="login-1"]').type('2')
+    cy.get('div[data-cy-id="login-1"] input').type('2')
     cy.get('div[data-cy-id="login-1"] .v-messages').should('be.empty')
 
-    cy.get('div[data-cy-id="password-1"]').type('easypeasy')
+    cy.get('div[data-cy-id="password-1"] input').type('easypeasy')
     cy.get('div[data-cy-id="password-1"] .v-messages').contains(
       'Пароль должен содержать как минимум 8 символов, один заглавный символ, один строчный символ, одна цифра и один спецсимвол из представленных @, $, !, %, *, ?, &',
     )
-    cy.get('div[data-cy-id="password-1"]').type('!@QWE23')
+    cy.get('div[data-cy-id="password-1"] input').type('!@QWE23')
     cy.get('div[data-cy-id="password-1"] .v-messages').should('be.empty')
     cy.get('h1').click()
     cy.reload()
@@ -65,7 +65,7 @@ describe('Users', () => {
     cy.get('[data-cy-id="to-add-user"]').click()
     cy.get('div[data-cy-id="type-2"]').click()
     cy.get('div.v-overlay-container .v-list-item-title:contains("Локальная")').click()
-    cy.get('div[data-cy-id="login-2"]').type('dd12')
+    cy.get('div[data-cy-id="login-2"] input').type('dd12')
     cy.get('div[data-cy-id="login-2"] .v-messages').contains(
       'Имена пользователей должны быть уникальными',
     )
@@ -77,11 +77,11 @@ describe('Users', () => {
     cy.get('[data-cy-id="to-confirm"]').click()
     cy.get('[data-cy-id="to-confirm"]').should('not.exist')
 
-    cy.get('div[data-cy-id="password-1"]').type('easypeasy')
+    cy.get('div[data-cy-id="password-1"] input').type('easypeasy')
     cy.get('div[data-cy-id="password-1"] .v-messages').contains(
       'Пароль должен содержать как минимум 8 символов, один заглавный символ, один строчный символ, одна цифра и один спецсимвол из представленных @, $, !, %, *, ?, &',
     )
-    cy.get('div[data-cy-id="password-1"]').type('!@QWE23')
+    cy.get('div[data-cy-id="password-1"] input').type('!@QWE23')
     cy.get('div[data-cy-id="password-1"] .v-messages').should('be.empty')
     cy.get('h1').click()
 
@@ -91,7 +91,7 @@ describe('Users', () => {
     cy.get('div[data-cy-id="type-2"]').click()
     cy.get('div.v-overlay-container .v-list-item-title:contains("Локальная")').click()
     // 101 символ
-    cy.get('div[data-cy-id="login-2"]').type(
+    cy.get('div[data-cy-id="login-2"] input').type(
       'dd125dd125dd125dd125dd125dd125dd125dd125dd125dd125dd125dd125dd125dd125dd125dd125dd125dd125dd125dd125dd125dd125dd125dd1251',
     )
     cy.get('div[data-cy-id="login-2"] .v-messages').contains(

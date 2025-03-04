@@ -113,7 +113,7 @@ onUnmounted(() => {
 }
 .users-table {
   display: grid;
-  grid-template-columns: repeat(5, minmax(246px, 1fr));
+  grid-template-columns: repeat(5, 1fr);
   gap: 10px;
   &--empty {
     grid-column: 1 / 6;
