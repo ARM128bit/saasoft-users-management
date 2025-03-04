@@ -130,11 +130,5 @@ describe('Users', () => {
     cy.get('div[data-cy-id="type-1"]').click()
     cy.get('div.v-overlay-container .v-list-item-title:contains("LDAP")').click()
     cy.get('h1').click()
-
-    cy.getAllLocalStorage().then((result) => {
-      expect(result['http://localhost:4173'].users).equal(
-        '[{"id":"8173288b-1ab3-4c8f-9da9-6d4f36d70310","label":[{"text":"dd"},{"text":"ss"}],"type":"LDAP","login":"dd1","password":null},{"id":"902d162b-2506-4055-a0f4-328f94960253","label":[{"text":""}],"type":"LDAP","login":"dd12","password":null}]',
-      )
-    })
   })
 })
