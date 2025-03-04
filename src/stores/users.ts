@@ -10,6 +10,8 @@ export const draftUser = (): User => {
     type: undefined,
     login: undefined,
     password: undefined,
+    isSaved: false,
+    isNew: true,
   }
 }
 
@@ -32,12 +34,10 @@ export const useUsersStore = defineStore('users', () => {
   }
 
   const getLocalUsers = () => {
-    users.value = []
     const localUsers: Array<User> = JSON.parse(localStorage.getItem('users') ?? '[]')
-    users.value = localUsers
-    // for (const [id, user] of localUsers) {
-    //   users.set(id, user)
-    // }
+    users.value = localUsers.filter(
+      (user) => user.login && ((user.type === 'Локальная' && user.password) || user.type),
+    )
   }
 
   const setLocalUsers = () => {

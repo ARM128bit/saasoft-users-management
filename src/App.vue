@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import UsersTable from "./components/UsersTable.vue"
-import { useUsersStore } from './stores/users';
+import { onMounted } from 'vue'
+import UsersTable from '@/components/UsersTable.vue'
+import { useUsersStore } from '@/stores/users'
 
-const { getLocalUsers } = useUsersStore();
+const { getLocalUsers } = useUsersStore()
 
-getLocalUsers();
+getLocalUsers()
 
 // При переходе между вкладкаим браузера
 // прогружаем корзину из localStorage,
 // чтобы пользователь сразу видел актуальные данные
 onMounted(() => {
-  window.addEventListener("visibilitychange", () => {
+  window.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
-      getLocalUsers();
+      getLocalUsers()
     }
-  });
-});
+  })
+})
 </script>
 
 <template>

@@ -1,6 +1,5 @@
 import pluginVue from 'eslint-plugin-vue'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
-import pluginVitest from '@vitest/eslint-plugin'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import pluginCypress from 'eslint-plugin-cypress/flat'
@@ -29,16 +28,12 @@ export default defineConfigWithVueTs(
           allowModifiers: true,
         },
       ],
+      'no-console': ['error', { allow: ['error'] }],
     },
   },
 
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
-
-  {
-    ...pluginVitest.configs.recommended,
-    files: ['src/**/__tests__/*'],
-  },
 
   {
     ...pluginCypress.configs.recommended,
