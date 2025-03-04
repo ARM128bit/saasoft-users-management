@@ -1,47 +1,74 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { watch } from 'vue'
 import type { User } from '@/global'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
+
+export type UserForm = Omit<User, 'label'> & {
+  label: string | null
+}
 
 const user = defineModel<User>('user', { required: true })
 const emit = defineEmits(['remove'])
 const types = ['LDAP', 'Локальная']
 
-const userLabel = computed(() => {
-  return user.value.label?.map((l) => l.text).join(';')
-})
-
-const handleLabelForm = (val: string) => {
-  user.value.label = val.split(';').map((l) => ({ text: l }))
-}
-
-const { defineField, errors } = useForm({
-  validationSchema: yup.object({
+const { defineField, errors, handleSubmit, meta } = useForm<UserForm>({
+  initialValues: {
+    label: user.value.label?.map((l) => l.text).join(';'),
+    type: user.value.type,
+    login: user.value.login,
+    password: user.value.password,
+  },
+  validationSchema: yup.object().shape({
     label: yup.string().max(50, 'Превышено допустимое количество символов. Максимум 50'),
-    type: yup.string().required('Значение должно быть заполнено'),
+    type: yup
+      .string()
+      .matches(/^(LDAP|Локальная)$/i, 'Некорректно заполнено поле')
+      .required('Значение должно быть заполнено'),
     login: yup
       .string()
-      .matches(/^(?=.*[A-Za-z0-9]$)[A-Za-z][A-Za-z\d.-]$/i, 'Некорректно заполнено поле')
       .min(3, 'Минимальное количество 3 символа')
       .max(100, 'Допустимое количество 100 символов')
+      .matches(/^[a-zA-Z]([a-zA-Z0-9.-]{0,98}[a-zA-Z0-9])?$/i, 'Некорректно заполнено поле')
       .required('Значение должно быть заполнено'),
-    password: yup
-      .string()
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,100}$/,
-        'Пароль должен содержать как минимум 8 символов, один заглавный символ, один строчный символ, одна цифра и один спецсимвол',
-      )
-      .min(8, 'Минимальное количество 8 символов')
-      .max(100, 'Допустимое количество 100 символов')
-      .required('Значение должно быть заполнено'),
+    password: yup.string().when('type', {
+      is: 'Локальная',
+      then: (schema) =>
+        schema
+          .matches(
+            /^[A-Za-z\d@$!%*?&]{8,100}$/g,
+            'Пароль должен содержать как минимум 8 символов, один заглавный символ, один строчный символ, одна цифра и один спецсимвол из представленных @, $, !, %, *, ?, &',
+          )
+          .min(8, 'Минимальное количество 8 символов')
+          .max(100, 'Допустимое количество 100 символов')
+          .required('Значение должно быть заполнено'),
+    }),
   }),
 })
 
-const [label, labelAttrs] = defineField<string>('label')
-const [type, typeAttrs] = defineField<string>('type')
-const [login, loginAttrs] = defineField<string>('login')
-const [password, passwordAttrs] = defineField<string>('password')
+const onSubmit = handleSubmit((values) => {
+  const preparedUser: User = {
+    id: user.value.id,
+    label: values.label?.split(';').map((l) => ({ text: l })),
+    type: values.type,
+    login: values.login,
+    password: values.password,
+  }
+  user.value = preparedUser
+})
+
+watch(
+  () => meta.value.valid,
+  (val) => {
+    console.log(val)
+    if (val) onSubmit()
+  },
+)
+
+const [label, labelAttrs] = defineField('label')
+const [type, typeAttrs] = defineField('type')
+const [login, loginAttrs] = defineField('login')
+const [password, passwordAttrs] = defineField('password')
 </script>
 
 <template>
@@ -65,12 +92,12 @@ const [password, passwordAttrs] = defineField<string>('password')
     v-model="login"
     v-bind="loginAttrs"
     :error-messages="errors.login"
-    :class="{ 'login--colspan-2': user.type === 'LDAP' }"
+    :class="{ 'login--colspan-2': type === 'LDAP' }"
     density="compact"
     variant="outlined"
   ></v-text-field>
   <v-text-field
-    v-if="user.type !== 'LDAP'"
+    v-if="type !== 'LDAP'"
     v-model="password"
     v-bind="passwordAttrs"
     :error-messages="errors.password"

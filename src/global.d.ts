@@ -4,9 +4,8 @@ export type UserLabel = {
 
 export type User = {
   id: string
-  label: UserLabel[] | null
-  type: 'LDAP' | 'local' | null
-  login: string | null
-  password: string | null
-  saved?: boolean
+  label: UserLabel[] | undefined
+  type: 'LDAP' | 'local' | undefined
+  login: string | undefined
+  password: string | undefined
 }

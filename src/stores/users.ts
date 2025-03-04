@@ -7,9 +7,9 @@ export const draftUser = (): User => {
   return {
     id: uuidv4(),
     label: [],
-    type: null,
-    login: null,
-    password: null,
+    type: undefined,
+    login: undefined,
+    password: undefined,
   }
 }
 
@@ -18,6 +18,11 @@ export const useUsersStore = defineStore('users', () => {
 
   function addUser() {
     users.value.push(draftUser())
+    setLocalUsers()
+  }
+
+  const editUser = (user: User, idx: number) => {
+    users.value[idx] = user
     setLocalUsers()
   }
 
@@ -39,5 +44,5 @@ export const useUsersStore = defineStore('users', () => {
     localStorage.setItem('users', JSON.stringify(users.value))
   }
 
-  return { users, addUser, removeUser, getLocalUsers }
+  return { users, addUser, editUser, removeUser, getLocalUsers }
 })
