@@ -1,9 +1,10 @@
 <script setup lang="ts">
-const emit = defineEmits(['confirm'])
-const visible = defineModel('visible', {
+const emit = defineEmits<{
+  (e: 'confirm'): void
+}>()
+const visible = defineModel<boolean>('visible', {
   default: false,
   required: true,
-  type: Boolean,
 })
 </script>
 

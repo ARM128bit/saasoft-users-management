@@ -3,6 +3,7 @@ import type { User } from '@/global'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useUsersStore } from '@/stores/users'
+import { userTypes } from '@/constants/user'
 
 type UserForm = Omit<User, 'label'> & {
   label: string | null
@@ -20,7 +21,6 @@ const emit = defineEmits<{
 const usersStore = useUsersStore()
 
 const user = defineModel<User>('user', { required: true })
-const types = ['LDAP', 'Локальная']
 
 const {
   defineField,
@@ -114,7 +114,7 @@ const [password] = defineField('password')
     :data-cy-id="`type-${index}`"
     v-model="type"
     :error-messages="errors.type"
-    :items="types"
+    :items="userTypes"
     density="compact"
     variant="outlined"
     @change="onSubmit"

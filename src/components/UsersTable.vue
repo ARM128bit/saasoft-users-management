@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import type { User } from '@/global'
 import { useUsersStore } from '@/stores/users'
 import UserRow from '@/components/UserRow.vue'
 import ConfirmDeleteUserDialog from '@/components/ConfirmDeleteUserDialog.vue'
-import type { User } from '@/global'
 
 const usersStore = useUsersStore()
 
-const hasChangedAndNewUsers = computed(() => {
-  return usersStore.users.findIndex((u) => u.isSaved === false || u.isNew === true) !== -1
-})
-
 const hasNewUsers = computed(() => {
   return usersStore.users.findIndex((u) => u.isNew === true) !== -1
+})
+
+const hasChangedUsers = computed(() => {
+  return usersStore.users.findIndex((u) => u.isSaved === false) !== -1
 })
 
 const tableHeader = [
@@ -38,7 +38,7 @@ const onRemoveUser = ($event: User['id']) => {
 }
 
 const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-  if (hasChangedAndNewUsers.value) {
+  if (hasChangedUsers.value || hasNewUsers.value) {
     event.preventDefault()
   }
 }

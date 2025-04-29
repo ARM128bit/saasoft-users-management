@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { User } from '@/global'
 import { v4 as uuidv4 } from 'uuid'
+import { useLocalStorage } from '@/composables/useLocalStorage'
 
 export const draftUser = (): User => {
   return {
@@ -16,6 +17,8 @@ export const draftUser = (): User => {
 }
 
 export const useUsersStore = defineStore('users', () => {
+  const localStorageStore = useLocalStorage()
+
   const users = ref<Array<User>>([])
 
   function addUser() {
@@ -34,10 +37,10 @@ export const useUsersStore = defineStore('users', () => {
   }
 
   const getLocalUsers = () => {
-    const localUsers: Array<User> = JSON.parse(localStorage.getItem('users') ?? '[]')
-    users.value = localUsers.filter(
+    const localUsers: Array<User> | null = localStorageStore.getValue<Array<User>>('users')
+    users.value = localUsers?.filter(
       (user) => user.login && ((user.type === 'Локальная' && user.password) || user.type),
-    )
+    ) ?? []
   }
 
   const setLocalUsers = () => {
